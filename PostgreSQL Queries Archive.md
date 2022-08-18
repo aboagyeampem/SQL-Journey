@@ -4,12 +4,15 @@
 -- and the channel for each event. Additionally, you might choose to add a fourth column to 
 -- assure only Walmart events were chosen.
 
+
 -- Answer
 SELECT a.primary_poc, 
-		w.occurred_at, 
-        w.channel,
-        a.name
+	w.occurred_at, 
+       	w.channel,
+	a.name
 FROM accounts a
 JOIN web_events w
 ON a.id = w.account_id
-WHERE a.name = 'Walmart' -- Results named only_walmart.csv
+WHERE a.name = 'Walmart' 
+
+-- Results named only_walmart.csv
