@@ -1,0 +1,34 @@
+-- Questino 1
+SELECT ac.primary_poc, 
+		w.occurred_at, 
+        w.channel,
+        ac.name
+FROM accounts ac
+JOIN web_events w
+ON ac.id = w.account_id
+WHERE ac.name = 'Walmart' -- Results named only_walmart.csv
+
+
+-- Question 2
+SELECT s.name sales_rep,
+       r.name region,
+       ac.name account
+FROM sales_reps s
+JOIN accounts ac 
+ON ac.sales_rep_id = s.id
+JOIN region r
+ON r.id = s.region_id
+ORDER BY ac.name
+
+
+-- Question 3
+SELECT ac.name account,
+       r.name region,
+       (o.total_amt_usd/(o.total + 0.01)) unit_price
+FROM region r
+JOIN sales_reps s
+ON r.id = s.region_id
+JOIN accounts ac
+ON ac.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = ac.id
