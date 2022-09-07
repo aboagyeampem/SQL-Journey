@@ -2,4 +2,4 @@ This project documents my study journey on PostgresSQl from [Udacity by Mode](ht
 
 
 
-https://marksoro.medium.com/download-parch-and-posey-database-and-query-it-postgres-and-pgadmin-d4981dfc87f9
+[How to Create the Patch and Posey Database](https://marksoro.medium.com/download-parch-and-posey-database-and-query-it-postgres-and-pgadmin-d4981dfc87f9)
