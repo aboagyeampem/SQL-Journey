@@ -1,4 +1,4 @@
-This project documents my study journey on PostgresSQl from [Udacity by Mode] (https://www.udacity.com/course/sql-for-data-analysis--ud198)
+This project documents my study journey on PostgresSQl from [Udacity by Mode](https://www.udacity.com/course/sql-for-data-analysis--ud198)
 
 
 
