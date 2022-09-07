@@ -26,4 +26,77 @@ FROM (
 --Question1
 SELECT *, LEFT(primary_poc, POSITION(' ' IN primary_poc)-1) AS first_name, 
             RIGHT(primary_poc, (LENGTH(primary_poc)-POSITION(' ' IN primary_poc))) AS last_name
-FROM accounts
+FROM accounts;
+
+--OR using STRPOS
+
+SELECT *, LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) first_name, 
+            RIGHT(primary_poc, (LENGTH(primary_poc)-STRPOS(primary_poc, ' '))) last_name
+FROM accounts;
+
+
+
+-- CONTENATION
+-- Combining First and Last Names into One Column: 
+WITH merging AS (SELECT *, LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) first_name, 
+                    RIGHT(primary_poc, (LENGTH(primary_poc)-STRPOS(primary_poc, ' '))) last_name
+                    FROM accounts)
+SELECT CONCAT(first_name, ' ',last_name) full_name
+FROM merging
+
+--OR using || 
+WITH merging AS (SELECT *, LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) first_name, 
+                    RIGHT(primary_poc, (LENGTH(primary_poc)-STRPOS(primary_poc, ' '))) last_name
+                    FROM accounts)
+SELECT first_name || ' ' ||last_name full_name
+FROM merging
+
+
+-- Contenation Quiz
+
+--Question 1
+WITH merging AS (SELECT *, LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) first_name, 
+                    RIGHT(primary_poc, (LENGTH(primary_poc)-STRPOS(primary_poc, ' '))) last_name, name AS company
+                    FROM accounts)
+SELECT first_name || ' ' || last_name AS full_name, company, CONCAT(LOWER(first_name), '.', LOWER(last_name), '@', LOWER(company), '.com') AS email_address
+FROM merging
+
+
+-- Question 2: Removing spaces in comany name
+WITH merging AS (SELECT *, LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) first_name, 
+                    RIGHT(primary_poc, (LENGTH(primary_poc)-STRPOS(primary_poc, ' '))) last_name, name AS company
+                    FROM accounts)
+SELECT first_name || ' ' || last_name AS full_name, company, CONCAT(LOWER(first_name), '.', LOWER(last_name), '@', LOWER(TRIM(company)), '.com') AS email_address
+FROM merging
+
+-- OR Using REPLACE function
+WITH merging AS (SELECT *, LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) first_name, 
+                    RIGHT(primary_poc, (LENGTH(primary_poc)-STRPOS(primary_poc, ' '))) last_name, name AS company
+                    FROM accounts)
+SELECT first_name || ' ' || last_name AS full_name, company, CONCAT(LOWER(first_name), '.', LOWER(last_name), '@', LOWER(REPLACE(company, ' ','')), '.com') AS email_address
+FROM merging
+
+
+
+
+--COALESCE
+SELECT *
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id
+WHERE o.total IS NULL;
+
+-- Question 2: Fill order.account_id with account.id 
+SELECT COALESCE(o.id, a.id) filled_id, a.name, a.website, a.lat, a.long, a.primary_poc, a.sales_rep_id, o.*
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id
+WHERE o.total IS NULL;
+
+-- Filling all Quantiy columns that are NULL with zero (0)
+SELECT a.*, o.account_id,  COALESCE(o.standard_qty, 0) std, COALESCE(o.gloss_qty, 0) gloss, COALESCE(o.poster_qty, 0) poster,
+        COALESCE(o.standard_amt_usd, 0) std_amt, COALESCE(o.gloss_amt_usd, 0), COALESCE(o.poster_amt_usd, 0) poster_amt 
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id
+WHERE o.total IS NULL
